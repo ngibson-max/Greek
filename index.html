@@ -357,7 +357,7 @@ body {
 </div>
 
 <!-- API KEY -->
-<div class="api-banner" id="api-banner" style="display:none">
+<div class="api-banner" id="api-banner">
   <span>🔑</span>
   <input type="password" id="api-key-input" placeholder="Paste your Anthropic API key for AI Practice...">
   <button onclick="saveApiKey()">Save</button>
@@ -601,7 +601,7 @@ const phrases = [
 const catLabels = {restaurant:'🍽 Restaurant',bar:'🍻 Bar',shopping:'🛍 Shopping',essentials:'✨ Essentials',ordering:'📋 Ordering',dietary:'🥗 Dietary',feedback:'😋 Feedback',paying:'💶 Paying',streetfood:'🥙 Street Food'};
 
 // ─── API KEY ─────────────────────────────────────────────────────────────────
-let ANTHROPIC_API_KEY = localStorage.getItem('crete_api_key') || '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';
+let ANTHROPIC_API_KEY = localStorage.getItem('crete_api_key') || '';
 function saveApiKey() {
   const k = document.getElementById('api-key-input').value.trim();
   if (!k) return;
@@ -613,7 +613,9 @@ function clearApiKey() {
   ANTHROPIC_API_KEY = ''; localStorage.removeItem('crete_api_key');
   document.getElementById('api-banner').innerHTML = '<span>🔑</span><input type="password" id="api-key-input" placeholder="Paste your Anthropic API key for AI Practice..." style="flex:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:7px 12px;color:#fff;font-size:0.95em;font-family:monospace;outline:none"><button onclick="saveApiKey()" style="padding:7px 14px;border-radius:8px;border:none;background:var(--gold);color:var(--deeper);font-weight:600;cursor:pointer;font-size:0.9em;white-space:nowrap">Save</button>';
 }
-if (ANTHROPIC_API_KEY) saveApiKey();
+if (ANTHROPIC_API_KEY) {
+  document.getElementById('api-banner').innerHTML = '<span>✅</span><span style="opacity:0.7;font-size:0.9em">API key ready.</span><button onclick="clearApiKey()" style="margin-left:auto;padding:5px 10px;border-radius:6px;border:none;background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-size:0.8em">Change</button>';
+}
 
 // ─── SPEECH ──────────────────────────────────────────────────────────────────
 function speakText(text, lang = 'el-GR') {
