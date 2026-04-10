@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greek for Crete</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sea: #1a6b9a;
+  --deep: #0d3d5c;
+  --deeper: #081f30;
+  --gold: #f5c842;
+  --gold-soft: rgba(245,200,66,0.15);
+  --white10: rgba(255,255,255,0.10);
+  --white15: rgba(255,255,255,0.15);
+  --white25: rgba(255,255,255,0.25);
+  --white40: rgba(255,255,255,0.40);
+  --green: rgba(80,220,120,0.85);
+  --red: rgba(255,90,90,0.85);
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: radial-gradient(ellipse at 20% 0%, #1e7db5 0%, #0d3d5c 45%, #071825 100%);
+  min-height: 100vh; color: #fff;
+  padding: 0 0 40px 0;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 28px 20px 0;
+  position: relative;
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2em; font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 0%, #f5c842 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header .subtitle { font-size: 0.82em; opacity: 0.5; margin-top: 4px; letter-spacing: 2px; text-transform: uppercase; }
+
+/* API KEY BANNER */
+.api-banner {
+  background: rgba(245,200,66,0.12);
+  border: 1px solid rgba(245,200,66,0.3);
+  border-radius: 12px; margin: 16px 16px 0;
+  padding: 12px 16px; font-size: 0.82em;
+  display: flex; align-items: center; gap: 10px;
+}
+.api-banner input {
+  flex: 1; background: var(--white10); border: 1px solid var(--white25);
+  border-radius: 8px; padding: 7px 12px; color: #fff; font-size: 0.95em;
+  font-family: monospace; outline: none;
+}
+.api-banner button {
+  padding: 7px 14px; border-radius: 8px; border: none;
+  background: var(--gold); color: var(--deeper); font-weight: 600;
+  cursor: pointer; font-size: 0.9em; white-space: nowrap;
+}
+
+/* TABS */
+.tabs {
+  display: flex; gap: 0; justify-content: center;
+  margin: 20px 16px 0; background: var(--white10);
+  border-radius: 14px; padding: 5px; border: 1px solid var(--white15);
+}
+.tab {
+  flex: 1; padding: 9px 6px; border-radius: 10px; border: none;
+  background: transparent; color: rgba(255,255,255,0.6);
+  cursor: pointer; font-size: 0.78em; font-weight: 500;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  text-align: center; line-height: 1.3;
+}
+.tab.active { background: #fff; color: var(--deep); font-weight: 700; }
+.tab:hover:not(.active) { color: #fff; background: var(--white15); }
+
+/* CONTENT AREA */
+.content { padding: 18px 16px 0; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* CATEGORY PILLS */
+.cat-tabs { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
+.cat-btn {
+  padding: 6px 13px; border-radius: 20px;
+  border: 1.5px solid var(--white25);
+  background: transparent; color: rgba(255,255,255,0.75);
+  cursor: pointer; font-size: 0.78em; font-weight: 500;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.cat-btn.active { background: var(--white25); border-color: #fff; color: #fff; }
+
+/* PHRASE CARDS */
+.phrase-list { display: flex; flex-direction: column; gap: 10px; }
+.phrase-card {
+  background: var(--white10); border-radius: var(--radius); padding: 14px 16px;
+  border: 1px solid var(--white15); transition: border-color 0.2s;
+}
+.phrase-card:hover { border-color: var(--white40); }
+.phrase-card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.phrase-card-text { flex: 1; }
+.phrase-en { font-size: 0.88em; opacity: 0.7; margin-bottom: 4px; font-weight: 400; }
+.phrase-gr { font-size: 1.1em; color: var(--gold); margin-bottom: 3px; font-weight: 600; }
+.phrase-pron { font-size: 0.78em; opacity: 0.5; font-style: italic; }
+.hear-btn {
+  flex-shrink: 0; padding: 7px 10px; border-radius: 9px;
+  border: 1.5px solid var(--white25); background: var(--white10);
+  color: rgba(255,255,255,0.8); cursor: pointer; font-size: 0.8em;
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: all 0.2s; white-space: nowrap; margin-top: 1px;
+  font-family: 'DM Sans', sans-serif;
+}
+.hear-btn:hover { background: var(--white25); border-color: var(--gold); color: var(--gold); }
+
+/* FLASHCARDS */
+#sec-flashcards { text-align: center; }
+.fc-progress { font-size: 0.82em; opacity: 0.5; margin-bottom: 14px; }
+.fc-card-wrap { perspective: 1000px; margin: 0 auto 20px; width: 100%; max-width: 420px; height: 190px; }
+.fc-card {
+  width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); cursor: pointer; border-radius: var(--radius);
+}
+.fc-card.flipped { transform: rotateY(180deg); }
+.fc-front, .fc-back {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: var(--radius); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.fc-front { background: var(--white15); border: 1.5px solid var(--white25); }
+.fc-back { background: rgba(245,200,66,0.12); border: 1.5px solid rgba(245,200,66,0.4); transform: rotateY(180deg); }
+.fc-front .cat-label { font-size: 0.7em; opacity: 0.45; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.fc-front .en { font-size: 1.2em; font-weight: 600; }
+.fc-hint { font-size: 0.72em; opacity: 0.35; margin-top: 12px; }
+.fc-back .gr { font-size: 1.3em; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+.fc-back .pron { font-size: 0.85em; opacity: 0.65; font-style: italic; }
+.fc-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.fc-btn {
+  padding: 10px 22px; border-radius: 24px; border: none; cursor: pointer;
+  font-size: 0.85em; font-weight: 600; transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-flip { background: var(--white20); color: #fff; background: var(--white15); border: 1px solid var(--white25); }
+.btn-prev, .btn-shuffle { background: var(--white10); color: rgba(255,255,255,0.8); border: 1px solid var(--white15); }
+.btn-next { background: var(--gold); color: var(--deeper); }
+
+/* QUIZ */
+.quiz-score { text-align: center; font-size: 0.82em; opacity: 0.55; margin-bottom: 14px; }
+.quiz-q {
+  background: var(--white10); border-radius: var(--radius); padding: 20px;
+  margin-bottom: 16px; text-align: center; border: 1px solid var(--white15);
+}
+.quiz-q .label { font-size: 0.72em; opacity: 0.5; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.quiz-q .question { font-size: 1.15em; font-weight: 700; }
+.quiz-q .question.greek { color: var(--gold); }
+.quiz-q .q-audio-btn { margin-top: 10px; background: var(--white10); border: 1px solid var(--white25); color: rgba(255,255,255,0.7); padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 0.78em; font-family: 'DM Sans', sans-serif; }
+.quiz-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+.quiz-opt {
+  padding: 0; border-radius: 12px; border: 1.5px solid var(--white25);
+  background: var(--white10); color: #fff; cursor: pointer;
+  text-align: left; transition: all 0.2s; overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.quiz-opt:hover:not(:disabled) { background: var(--white25); border-color: var(--white40); }
+.quiz-opt.correct { background: rgba(80,200,120,0.2); border-color: rgba(80,200,120,0.7); }
+.quiz-opt.wrong { background: rgba(255,80,80,0.2); border-color: rgba(255,80,80,0.6); }
+.quiz-opt:disabled { cursor: default; }
+.opt-inner { display: flex; align-items: stretch; }
+.opt-audio { flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; background: var(--white10); border-right: 1px solid var(--white15); font-size: 1em; cursor: pointer; transition: background 0.15s; }
+.opt-audio:hover { background: var(--white25); }
+.opt-content { flex: 1; padding: 13px 14px; }
+.opt-gr { font-size: 1em; font-weight: 600; color: var(--gold); margin-bottom: 3px; }
+.opt-pron { font-size: 0.76em; opacity: 0.55; font-style: italic; margin-bottom: 4px; }
+.opt-en { font-size: 0.8em; opacity: 0.75; }
+.opt-hint-btn { font-size: 0.7em; background: var(--white10); border: 1px solid var(--white25); color: rgba(255,255,255,0.6); padding: 2px 8px; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 2px; display: inline-block; }
+.opt-en-hidden { display: none; }
+.quiz-hint-bar { text-align: center; margin-bottom: 12px; }
+.quiz-hint-all { background: transparent; border: 1.5px solid rgba(245,200,66,0.3); color: rgba(245,200,66,0.7); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.78em; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.quiz-hint-all:hover { background: rgba(245,200,66,0.1); border-color: var(--gold); color: var(--gold); }
+.quiz-feedback { text-align: center; min-height: 28px; font-size: 0.88em; margin-bottom: 10px; font-weight: 500; }
+.quiz-next { display: block; margin: 0 auto; padding: 12px 32px; border-radius: 24px; border: none; background: var(--gold); color: var(--deeper); font-weight: 700; cursor: pointer; font-size: 0.92em; font-family: 'DM Sans', sans-serif; }
+.quiz-end { text-align: center; padding: 20px 0; }
+.quiz-end .score-big { font-family: 'Playfair Display', serif; font-size: 3.5em; font-weight: 900; color: var(--gold); }
+.quiz-end .score-label { font-size: 0.9em; opacity: 0.6; margin-top: 4px; }
+.quiz-end .score-msg { font-size: 1em; margin: 14px 0 20px; font-weight: 500; }
+.quiz-restart { padding: 11px 26px; border-radius: 24px; border: none; background: var(--white25); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.9em; font-family: 'DM Sans', sans-serif; margin-right: 10px; }
+
+/* WEAK PHRASES SUMMARY */
+.weak-summary {
+  background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.25);
+  border-radius: var(--radius); padding: 16px; margin-top: 18px; text-align: left;
+}
+.weak-summary h3 { font-size: 0.9em; color: var(--gold); margin-bottom: 10px; }
+.weak-item { font-size: 0.82em; padding: 6px 0; border-bottom: 1px solid var(--white10); display: flex; justify-content: space-between; align-items: center; }
+.weak-item:last-child { border-bottom: none; }
+.weak-item .wph { color: var(--gold); font-weight: 500; }
+.weak-item .wcnt { opacity: 0.5; font-size: 0.85em; }
+.btn-targeted { display: block; width: 100%; margin-top: 14px; padding: 12px; border-radius: 12px; border: none; background: var(--gold); color: var(--deeper); font-weight: 700; cursor: pointer; font-size: 0.9em; font-family: 'DM Sans', sans-serif; }
+
+/* AI PRACTICE TAB */
+#sec-practice { display: none; flex-direction: column; }
+#sec-practice.active { display: flex; }
+.practice-header { text-align: center; padding-bottom: 14px; border-bottom: 1px solid var(--white10); margin-bottom: 14px; }
+.practice-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3em; font-weight: 700; }
+.practice-header p { font-size: 0.8em; opacity: 0.5; margin-top: 4px; }
+
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 14px; }
+.scenario-btn {
+  padding: 12px 10px; border-radius: 12px; border: 1.5px solid var(--white15);
+  background: var(--white10); color: #fff; cursor: pointer;
+  font-size: 0.82em; font-weight: 500; text-align: center;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif; line-height: 1.3;
+}
+.scenario-btn:hover { background: var(--white25); border-color: var(--white40); }
+.scenario-btn.active-scenario { background: rgba(245,200,66,0.15); border-color: var(--gold); color: var(--gold); }
+
+/* PRACTICE GAME AREA */
+.practice-game { display: none; }
+.practice-game.active { display: block; }
+.game-scene {
+  background: var(--white10); border-radius: var(--radius); padding: 16px;
+  border: 1px solid var(--white15); margin-bottom: 14px;
+}
+.game-scene-label { font-size: 0.7em; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.4; margin-bottom: 8px; }
+.game-scene-text { font-size: 0.95em; line-height: 1.6; }
+.game-scene-text .gr-phrase { color: var(--gold); font-weight: 600; display: block; margin-top: 6px; font-size: 1.05em; }
+.game-scene-audio { margin-top: 10px; background: var(--white10); border: 1px solid var(--white25); color: rgba(255,255,255,0.7); padding: 5px 14px; border-radius: 20px; cursor: pointer; font-size: 0.78em; font-family: 'DM Sans', sans-serif; }
+
+.game-prompt { font-size: 0.8em; opacity: 0.5; text-align: center; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+.answer-tiles { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.answer-tile {
+  border-radius: 13px; border: 1.5px solid var(--white20);
+  background: var(--white10); cursor: pointer;
+  transition: all 0.2s; overflow: hidden;
+  border-color: var(--white25);
+}
+.answer-tile:hover:not(.disabled) { border-color: var(--white40); background: var(--white15); }
+.answer-tile.correct { border-color: rgba(80,200,120,0.8); background: rgba(80,200,120,0.15); }
+.answer-tile.wrong { border-color: rgba(255,80,80,0.7); background: rgba(255,80,80,0.12); }
+.answer-tile.disabled { cursor: default; }
+.tile-inner { display: flex; align-items: stretch; }
+.tile-audio {
+  flex-shrink: 0; width: 44px; display: flex; align-items: center; justify-content: center;
+  background: var(--white10); border-right: 1px solid var(--white15);
+  font-size: 1em; cursor: pointer; transition: background 0.15s;
+}
+.tile-audio:hover { background: var(--white25); }
+.tile-body { flex: 1; padding: 12px 14px; }
+.tile-gr { font-size: 1.05em; font-weight: 700; color: var(--gold); margin-bottom: 3px; }
+.tile-pron { font-size: 0.76em; opacity: 0.55; font-style: italic; margin-bottom: 5px; }
+.tile-en-wrap { display: flex; align-items: center; gap: 6px; }
+.tile-en { font-size: 0.8em; opacity: 0.75; }
+.tile-en.hidden { display: none; }
+.tile-hint-btn {
+  font-size: 0.68em; background: var(--white10); border: 1px solid var(--white25);
+  color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 10px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+.tile-hint-btn:hover { color: var(--gold); border-color: rgba(245,200,66,0.4); }
+
+.game-hint-row { text-align: center; margin-bottom: 12px; }
+.game-stuck-btn {
+  background: transparent; border: 1.5px solid rgba(245,200,66,0.25);
+  color: rgba(245,200,66,0.6); padding: 6px 16px; border-radius: 20px;
+  cursor: pointer; font-size: 0.76em; font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.game-stuck-btn:hover { background: rgba(245,200,66,0.08); border-color: var(--gold); color: var(--gold); }
+
+.game-feedback {
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px;
+  font-size: 0.9em; line-height: 1.6; display: none;
+  border: 1px solid var(--white15);
+}
+.game-feedback.show { display: block; }
+.game-feedback.correct-fb { background: rgba(80,200,120,0.12); border-color: rgba(80,200,120,0.4); }
+.game-feedback.wrong-fb { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.35); }
+.fb-audio-btn { margin-top: 8px; background: var(--white10); border: 1px solid var(--white25); color: rgba(255,255,255,0.7); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 0.76em; font-family: 'DM Sans', sans-serif; }
+
+.game-next-btn {
+  display: none; width: 100%; padding: 13px; border-radius: 12px; border: none;
+  background: var(--gold); color: var(--deeper); font-weight: 700;
+  cursor: pointer; font-size: 0.92em; font-family: 'DM Sans', sans-serif; margin-bottom: 12px;
+}
+.game-next-btn.show { display: block; }
+.game-end-btn {
+  display: none; width: 100%; padding: 13px; border-radius: 12px; border: none;
+  background: var(--white15); color: #fff; font-weight: 600;
+  cursor: pointer; font-size: 0.88em; font-family: 'DM Sans', sans-serif; margin-bottom: 10px;
+  border: 1px solid var(--white25);
+}
+.game-end-btn.show { display: block; }
+
+/* LOADING INDICATOR */
+.typing-indicator {
+  display: flex; gap: 5px; padding: 14px 16px; background: var(--white10);
+  border-radius: var(--radius); border: 1px solid var(--white15); align-items: center;
+  margin-bottom: 14px;
+}
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5);
+  animation: typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+
+/* SESSION STATS */
+.session-stats {
+  display: flex; gap: 10px; margin-bottom: 14px;
+}
+.stat-chip {
+  flex: 1; background: var(--white10); border: 1px solid var(--white15);
+  border-radius: 10px; padding: 9px; text-align: center; font-size: 0.78em;
+}
+.stat-chip .val { font-size: 1.4em; font-weight: 700; color: var(--gold); display: block; }
+.stat-chip .lbl { opacity: 0.5; font-size: 0.85em; }
+
+/* PRACTICE END SCREEN */
+.practice-end { text-align: center; padding: 10px 0; }
+.practice-end .big-score { font-family: 'Playfair Display', serif; font-size: 3em; font-weight: 900; color: var(--gold); }
+
+/* TARGETED EXERCISE AREA */
+.targeted-area { display: none; }
+.targeted-area.active { display: block; }
+.targeted-header { background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.25); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+.targeted-header h3 { color: var(--gold); font-size: 0.95em; margin-bottom: 4px; }
+.targeted-header p { font-size: 0.8em; opacity: 0.6; }
+.targeted-content { font-size: 0.88em; line-height: 1.7; }
+.targeted-content strong { color: var(--gold); }
+.targeted-content .t-phrase { background: var(--white10); border-radius: 10px; padding: 10px 13px; margin: 8px 0; border: 1px solid var(--white15); }
+.targeted-content .t-gr { color: var(--gold); font-size: 1em; font-weight: 600; }
+.targeted-content .t-pron { font-size: 0.78em; opacity: 0.5; font-style: italic; }
+.targeted-content .t-tip { font-size: 0.82em; opacity: 0.75; margin-top: 5px; }
+.btn-back-practice { display: block; width: 100%; margin-top: 16px; padding: 12px; border-radius: 12px; border: 1px solid var(--white25); background: var(--white10); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.88em; font-family: 'DM Sans', sans-serif; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--white25); border-radius: 4px; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.section.active { animation: fadeUp 0.3s ease; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🇬🇷 Greek for Crete</h1>
+  <p class="subtitle">Restaurants · Bars · Shopping</p>
+</div>
+
+<!-- API KEY -->
+<div class="api-banner" id="api-banner">
+  <span>🔑</span>
+  <input type="password" id="api-key-input" placeholder="Paste your Anthropic API key for AI Practice...">
+  <button onclick="saveApiKey()">Save</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('phrasebook',this)">📖<br>Phrases</button>
+  <button class="tab" onclick="showTab('flashcards',this)">🃏<br>Cards</button>
+  <button class="tab" onclick="showTab('quiz',this)">🧠<br>Quiz</button>
+  <button class="tab" onclick="showTab('practice',this)">💬<br>Practice</button>
+</div>
+
+<div class="content">
+
+<!-- PHRASEBOOK -->
+<div id="sec-phrasebook" class="section active">
+  <div class="cat-tabs">
+    <button class="cat-btn active" onclick="filterPhrases('all',this)">All</button>
+    <button class="cat-btn" onclick="filterPhrases('essentials',this)">✨ Essentials</button>
+    <button class="cat-btn" onclick="filterPhrases('restaurant',this)">🍽 Restaurant</button>
+    <button class="cat-btn" onclick="filterPhrases('ordering',this)">📋 Ordering</button>
+    <button class="cat-btn" onclick="filterPhrases('dietary',this)">🥗 Dietary</button>
+    <button class="cat-btn" onclick="filterPhrases('feedback',this)">😋 Feedback</button>
+    <button class="cat-btn" onclick="filterPhrases('bar',this)">🍻 Bar</button>
+    <button class="cat-btn" onclick="filterPhrases('paying',this)">💶 Paying</button>
+    <button class="cat-btn" onclick="filterPhrases('streetfood',this)">🥙 Street Food</button>
+    <button class="cat-btn" onclick="filterPhrases('shopping',this)">🛍 Shopping</button>
+  </div>
+  <div class="phrase-list" id="phrase-list"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="sec-flashcards" class="section">
+  <div class="cat-tabs" id="fc-filter">
+    <button class="cat-btn active" onclick="setFcFilter('all',this)">All</button>
+    <button class="cat-btn" onclick="setFcFilter('essentials',this)">✨</button>
+    <button class="cat-btn" onclick="setFcFilter('restaurant',this)">🍽</button>
+    <button class="cat-btn" onclick="setFcFilter('ordering',this)">📋</button>
+    <button class="cat-btn" onclick="setFcFilter('dietary',this)">🥗</button>
+    <button class="cat-btn" onclick="setFcFilter('feedback',this)">😋</button>
+    <button class="cat-btn" onclick="setFcFilter('bar',this)">🍻</button>
+    <button class="cat-btn" onclick="setFcFilter('paying',this)">💶</button>
+    <button class="cat-btn" onclick="setFcFilter('streetfood',this)">🥙</button>
+    <button class="cat-btn" onclick="setFcFilter('shopping',this)">🛍</button>
+  </div>
+  <div class="fc-progress" id="fc-progress"></div>
+  <div class="fc-card-wrap">
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-front">
+        <div class="cat-label" id="fc-cat"></div>
+        <div class="en" id="fc-en"></div>
+        <div class="fc-hint">tap to reveal Greek</div>
+      </div>
+      <div class="fc-back">
+        <div class="gr" id="fc-gr"></div>
+        <div class="pron" id="fc-pron"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-btns">
+    <button class="fc-btn btn-prev" onclick="fcMove(-1)">← Prev</button>
+    <button class="fc-btn btn-flip" onclick="flipCard()">Flip</button>
+    <button class="fc-btn btn-next" onclick="fcMove(1)">Next →</button>
+  </div>
+  <div style="text-align:center; display:flex; gap:10px; justify-content:center;">
+    <button class="fc-btn btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+    <button class="fc-btn btn-shuffle" id="fc-hear-btn" onclick="hearCurrent()">🔊 Hear</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="sec-quiz" class="section">
+  <div class="quiz-score" id="quiz-score"></div>
+  <div id="quiz-body"></div>
+</div>
+
+<!-- AI PRACTICE -->
+<div id="sec-practice" class="section">
+  <!-- SCENARIO SELECT -->
+  <div id="practice-select">
+    <div class="practice-header">
+      <h2>AI Practice</h2>
+      <p>Choose a scenario — Claude will guide you through a real conversation</p>
+    </div>
+    <div class="scenario-grid">
+      <button class="scenario-btn" onclick="startScenario('restaurant')">🍽<br>At a Restaurant<br><small style="opacity:0.5;font-size:0.85em">Order food & drinks</small></button>
+      <button class="scenario-btn" onclick="startScenario('bar')">🍻<br>At a Bar<br><small style="opacity:0.5;font-size:0.85em">Order drinks, cheers!</small></button>
+      <button class="scenario-btn" onclick="startScenario('market')">🛍<br>At the Market<br><small style="opacity:0.5;font-size:0.85em">Shop & haggle</small></button>
+      <button class="scenario-btn" onclick="startScenario('streetfood')">🥙<br>Street Food<br><small style="opacity:0.5;font-size:0.85em">Gyros & souvlaki</small></button>
+      <button class="scenario-btn" onclick="startScenario('dietary')">🥗<br>Dietary Needs<br><small style="opacity:0.5;font-size:0.85em">Allergies & preferences</small></button>
+      <button class="scenario-btn" onclick="startScenario('paying')">💶<br>Paying the Bill<br><small style="opacity:0.5;font-size:0.85em">Pay & tip</small></button>
+    </div>
+    <!-- WEAK PHRASES (shown if any tracked) -->
+    <div id="weak-area" style="display:none;">
+      <div class="weak-summary">
+        <h3>⚠️ Your weak spots</h3>
+        <div id="weak-list"></div>
+        <button class="btn-targeted" onclick="startTargetedExercise()">🎯 Generate targeted exercises</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME AREA -->
+  <div id="practice-game" class="practice-game">
+    <div class="session-stats">
+      <div class="stat-chip"><span class="val" id="stat-correct">0</span><span class="lbl">Correct</span></div>
+      <div class="stat-chip"><span class="val" id="stat-hints">0</span><span class="lbl">Hints used</span></div>
+      <div class="stat-chip"><span class="val" id="stat-q">0</span><span class="lbl">Question</span></div>
+    </div>
+    <div class="game-scene" id="game-scene">
+      <div class="game-scene-label">Scene</div>
+      <div class="game-scene-text" id="game-scene-text">Loading...</div>
+      <button class="game-scene-audio" onclick="speakText(currentSceneGreek,'el-GR')">🔊 Hear the Greek</button>
+    </div>
+    <div class="game-prompt">Choose the correct response:</div>
+    <div class="answer-tiles" id="answer-tiles"></div>
+    <div class="game-hint-row">
+      <button class="game-stuck-btn" onclick="revealAllHints()">💡 I'm stuck — show meanings</button>
+    </div>
+    <div class="game-feedback" id="game-feedback"></div>
+    <button class="game-next-btn" id="game-next-btn" onclick="nextGameQuestion()">Continue →</button>
+    <button class="game-end-btn" id="game-end-btn" onclick="endSession()">End session & see results</button>
+  </div>
+
+  <!-- TARGETED EXERCISES -->
+  <div id="targeted-area" class="targeted-area">
+    <div class="targeted-header">
+      <h3>🎯 Targeted exercises for your weak spots</h3>
+      <p>Claude has prepared a personalised mini-lesson based on your mistakes</p>
+    </div>
+    <div id="targeted-content" class="targeted-content"></div>
+    <button class="btn-back-practice" onclick="backToPractice()">← Back to Practice</button>
+  </div>
+
+  <!-- SESSION END -->
+  <div id="practice-end" style="display:none;">
+    <div class="practice-end">
+      <div class="big-score" id="end-score">0/0</div>
+      <div style="margin-top:6px;opacity:0.6;font-size:0.9em" id="end-msg"></div>
+    </div>
+    <div class="weak-summary" id="end-weak" style="margin-top:16px;display:none;">
+      <h3>Phrases that caught you out:</h3>
+      <div id="end-weak-list"></div>
+      <button class="btn-targeted" onclick="startTargetedExercise()">🎯 Generate targeted exercises</button>
+    </div>
+    <button class="btn-back-practice" onclick="backToPractice()" style="margin-top:14px;">← New scenario</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const phrases = [
+  {cat:'essentials',en:'Hello (formal / to a group)',gr:'Γεια σας',pron:'YAH-sas'},
+  {cat:'essentials',en:'Hello (informal)',gr:'Γεια σου',pron:'YAH-soo'},
+  {cat:'essentials',en:'Good morning',gr:'Καλημέρα',pron:'ka-li-ME-ra'},
+  {cat:'essentials',en:'Good afternoon / evening',gr:'Καλησπέρα',pron:'ka-li-SPE-ra'},
+  {cat:'essentials',en:'Good night',gr:'Καληνύχτα',pron:'ka-li-NIH-ta'},
+  {cat:'essentials',en:'Goodbye (formal)',gr:'Αντίο',pron:'an-DI-o'},
+  {cat:'essentials',en:'Bye! (informal)',gr:'Γεια!',pron:'YAH'},
+  {cat:'essentials',en:'See you later',gr:'Τα λέμε',pron:'ta LE-meh'},
+  {cat:'essentials',en:'Thank you',gr:'Ευχαριστώ',pron:'ef-kha-ri-STO'},
+  {cat:'essentials',en:'Thank you very much',gr:'Ευχαριστώ πολύ',pron:'ef-kha-ri-STO po-LI'},
+  {cat:'essentials',en:'Please / You\'re welcome',gr:'Παρακαλώ',pron:'pa-ra-ka-LO'},
+  {cat:'essentials',en:'Yes',gr:'Ναι',pron:'neh'},
+  {cat:'essentials',en:'No',gr:'Όχι',pron:'OH-hi'},
+  {cat:'essentials',en:'Excuse me',gr:'Συγγνώμη',pron:'sig-NO-mi'},
+  {cat:'essentials',en:'I don\'t understand',gr:'Δεν καταλαβαίνω',pron:'dhen ka-ta-la-VEH-no'},
+  {cat:'essentials',en:'Do you speak English?',gr:'Μιλάτε αγγλικά;',pron:'mi-LA-teh ang-gli-KA'},
+  {cat:'essentials',en:'How much does it cost?',gr:'Πόσο κάνει;',pron:'PO-so KA-ni'},
+  {cat:'essentials',en:'Where is the toilet?',gr:'Πού είναι η τουαλέτα;',pron:'poo EE-neh i too-a-LE-ta'},
+  {cat:'essentials',en:'Help!',gr:'Βοήθεια!',pron:'vo-I-thi-a'},
+  {cat:'essentials',en:'Nice to meet you',gr:'Χαίρω πολύ',pron:'HEH-ro po-LI'},
+  {cat:'restaurant',en:'Is this table free?',gr:'Είναι ελεύθερο αυτό το τραπέζι;',pron:'EE-neh e-LEF-the-ro af-TO to tra-PEH-zi'},
+  {cat:'restaurant',en:'A table for two, please',gr:'Ένα τραπέζι για δύο, παρακαλώ',pron:'EH-na tra-PEH-zi ya DHI-o, pa-ra-ka-LO'},
+  {cat:'restaurant',en:'The menu, please',gr:'Τον κατάλογο, παρακαλώ',pron:'ton ka-TA-lo-go, pa-ra-ka-LO'},
+  {cat:'restaurant',en:'I would like...',gr:'Θα ήθελα...',pron:'tha I-the-la'},
+  {cat:'restaurant',en:'What do you recommend?',gr:'Τι συστήνετε;',pron:'ti si-STI-ne-teh'},
+  {cat:'restaurant',en:'Is this vegetarian?',gr:'Είναι χορτοφαγικό;',pron:'EE-neh hor-to-fa-yi-KO'},
+  {cat:'restaurant',en:'The bill, please',gr:'Τον λογαριασμό, παρακαλώ',pron:'ton lo-ga-ria-ZMO, pa-ra-ka-LO'},
+  {cat:'restaurant',en:'It was delicious!',gr:'Ήταν νόστιμο!',pron:'I-tan NOS-ti-mo'},
+  {cat:'restaurant',en:'Water, please',gr:'Νερό, παρακαλώ',pron:'ne-RO, pa-ra-ka-LO'},
+  {cat:'restaurant',en:'Without meat',gr:'Χωρίς κρέας',pron:'ho-RIS KREH-as'},
+  {cat:'bar',en:'Two beers, please',gr:'Δύο μπύρες, παρακαλώ',pron:'DHI-o BI-res, pa-ra-ka-LO'},
+  {cat:'bar',en:'A glass of wine',gr:'Ένα ποτήρι κρασί',pron:'EH-na po-TI-ri kra-SI'},
+  {cat:'bar',en:'Cheers!',gr:'Στην υγειά σας!',pron:'stin i-YA sas'},
+  {cat:'bar',en:'An ouzo, please',gr:'Ένα ούζο, παρακαλώ',pron:'EH-na OO-zo, pa-ra-ka-LO'},
+  {cat:'bar',en:'A raki, please',gr:'Ένα ρακί, παρακαλώ',pron:'EH-na ra-KI, pa-ra-ka-LO'},
+  {cat:'bar',en:'A Greek coffee, please',gr:'Έναν ελληνικό καφέ, παρακαλώ',pron:'EH-nan e-li-ni-KO ka-FE, pa-ra-ka-LO'},
+  {cat:'bar',en:'A frappe, please',gr:'Ένα φραπέ, παρακαλώ',pron:'EH-na fra-PE, pa-ra-ka-LO'},
+  {cat:'bar',en:'Without sugar',gr:'Χωρίς ζάχαρη',pron:'ho-RIS ZA-ha-ri'},
+  {cat:'bar',en:'What beers do you have?',gr:'Τι μπύρες έχετε;',pron:'ti BI-res EH-he-teh'},
+  {cat:'bar',en:'Do you have local wine?',gr:'Έχετε τοπικό κρασί;',pron:'EH-he-teh to-pi-KO kra-SI'},
+  {cat:'shopping',en:'How much is this?',gr:'Πόσο κάνει αυτό;',pron:'PO-so KA-ni af-TO'},
+  {cat:'shopping',en:'Do you have this in another size?',gr:'Το έχετε σε άλλο νούμερο;',pron:'to EH-he-teh seh A-lo NOO-me-ro'},
+  {cat:'shopping',en:'Can I try it on?',gr:'Μπορώ να το δοκιμάσω;',pron:'bo-RO na to do-ki-MA-so'},
+  {cat:'shopping',en:'I\'ll take it',gr:'Θα το πάρω',pron:'tha to PA-ro'},
+  {cat:'shopping',en:'Too expensive',gr:'Είναι πολύ ακριβό',pron:'EE-neh po-LI a-kri-VO'},
+  {cat:'shopping',en:'Do you accept cards?',gr:'Δέχεστε κάρτες;',pron:'DHE-hes-teh KAR-tes'},
+  {cat:'shopping',en:'Just looking, thanks',gr:'Απλώς κοιτάω, ευχαριστώ',pron:'ap-LOS ki-TAO, ef-kha-ri-STO'},
+  {cat:'shopping',en:'Do you have something cheaper?',gr:'Έχετε κάτι φθηνότερο;',pron:'EH-he-teh KA-ti fthi-NO-te-ro'},
+  {cat:'ordering',en:'A table outside, please',gr:'Ένα τραπέζι έξω, παρακαλώ',pron:'EH-na tra-PEH-zi EK-so, pa-ra-ka-LO'},
+  {cat:'ordering',en:'Is this dish spicy?',gr:'Είναι καυτερό αυτό το πιάτο;',pron:'EE-neh kaf-te-RO af-TO to PIA-to'},
+  {cat:'ordering',en:'What is in this dish?',gr:'Τι έχει αυτό το πιάτο;',pron:'ti EH-hi af-TO to PIA-to'},
+  {cat:'ordering',en:'I am allergic to...',gr:'Είμαι αλλεργικός/ή σε...',pron:'EE-meh a-ler-yi-KOS/I seh'},
+  {cat:'ordering',en:'Without onion, please',gr:'Χωρίς κρεμμύδι, παρακαλώ',pron:'ho-RIS kre-MI-dhi, pa-ra-ka-LO'},
+  {cat:'ordering',en:'We\'re ready to order',gr:'Είμαστε έτοιμοι να παραγγείλουμε',pron:'EE-mas-teh EH-ti-mi na pa-rang-GI-loo-meh'},
+  {cat:'ordering',en:'Can I have some extra sauce?',gr:'Μπορώ να έχω λίγη σάλτσα ακόμα;',pron:'bo-RO na EH-ho LI-yi SAL-tsa a-KO-ma'},
+  {cat:'dietary',en:'I am vegetarian',gr:'Είμαι χορτοφάγος',pron:'EE-meh hor-to-FA-gos'},
+  {cat:'dietary',en:'I am vegan',gr:'Είμαι vegan',pron:'EE-meh VEE-gan'},
+  {cat:'dietary',en:'I am allergic to nuts',gr:'Είμαι αλλεργικός στους ξηρούς καρπούς',pron:'EE-meh a-ler-yi-KOS stoos ksi-ROOS kar-POOS'},
+  {cat:'dietary',en:'I am allergic to shellfish',gr:'Είμαι αλλεργικός στα οστρακοειδή',pron:'EE-meh a-ler-yi-KOS sta os-tra-ko-i-DHI'},
+  {cat:'dietary',en:'Does this contain gluten?',gr:'Περιέχει γλουτένη αυτό;',pron:'pe-ri-EH-hi gloo-TE-ni af-TO'},
+  {cat:'dietary',en:'Does this contain dairy?',gr:'Περιέχει γαλακτοκομικά;',pron:'pe-ri-EH-hi ga-lak-to-ko-mi-KA'},
+  {cat:'dietary',en:'No pork, please',gr:'Χωρίς χοιρινό, παρακαλώ',pron:'ho-RIS hi-ri-NO, pa-ra-ka-LO'},
+  {cat:'feedback',en:'This is delicious!',gr:'Αυτό είναι νόστιμο!',pron:'af-TO EE-neh NOS-ti-mo'},
+  {cat:'feedback',en:'Excellent food!',gr:'Εξαιρετικό φαγητό!',pron:'ek-se-re-ti-KO fa-yi-TO'},
+  {cat:'feedback',en:'My compliments to the chef',gr:'Τα συγχαρητήριά μου στον σεφ',pron:'ta sing-ha-ri-TI-ria moo ston sef'},
+  {cat:'feedback',en:'It\'s a bit cold',gr:'Είναι λίγο κρύο',pron:'EE-neh LI-go KRI-o'},
+  {cat:'feedback',en:'This isn\'t what I ordered',gr:'Αυτό δεν είναι αυτό που παράγγειλα',pron:'af-TO dhen EE-neh af-TO poo pa-RANG-gi-la'},
+  {cat:'feedback',en:'We really enjoyed it',gr:'Το απολαύσαμε πολύ',pron:'to a-po-LAF-sa-meh po-LI'},
+  {cat:'paying',en:'Can I pay, please?',gr:'Μπορώ να πληρώσω, παρακαλώ;',pron:'bo-RO na pli-RO-so, pa-ra-ka-LO'},
+  {cat:'paying',en:'Can I pay by card?',gr:'Μπορώ να πληρώσω με κάρτα;',pron:'bo-RO na pli-RO-so meh KAR-ta'},
+  {cat:'paying',en:'Separate bills, please',gr:'Χωριστοί λογαριασμοί, παρακαλώ',pron:'ho-ris-TI lo-ga-ria-ZMI, pa-ra-ka-LO'},
+  {cat:'paying',en:'Keep the change',gr:'Κρατήστε τα ρέστα',pron:'kra-TIS-teh ta RES-ta'},
+  {cat:'paying',en:'Is service included?',gr:'Συμπεριλαμβάνεται η εξυπηρέτηση;',pron:'sim-pe-ri-lam-VA-ne-teh i ek-si-pi-RE-ti-si'},
+  {cat:'paying',en:'I think there\'s a mistake',gr:'Νομίζω υπάρχει λάθος',pron:'no-MI-zo i-PAR-hi LA-thos'},
+  {cat:'paying',en:'Can I have a receipt?',gr:'Μπορώ να έχω απόδειξη;',pron:'bo-RO na EH-ho a-PO-dhik-si'},
+  {cat:'paying',en:'We\'ll pay cash',gr:'Θα πληρώσουμε μετρητά',pron:'tha pli-RO-soo-meh met-ri-TA'},
+  {cat:'streetfood',en:'One gyros, please',gr:'Ένα γύρο, παρακαλώ',pron:'EH-na YI-ro, pa-ra-ka-LO'},
+  {cat:'streetfood',en:'With everything',gr:'Με όλα',pron:'meh O-la'},
+  {cat:'streetfood',en:'Without tzatziki',gr:'Χωρίς τζατζίκι',pron:'ho-RIS dza-DZI-ki'},
+  {cat:'streetfood',en:'A souvlaki, please',gr:'Ένα σουβλάκι, παρακαλώ',pron:'EH-na soov-LA-ki, pa-ra-ka-LO'},
+  {cat:'streetfood',en:'In pitta bread',gr:'Σε πίτα',pron:'seh PI-ta'},
+  {cat:'streetfood',en:'Is it fresh?',gr:'Είναι φρέσκο;',pron:'EE-neh FRES-ko'},
+  {cat:'streetfood',en:'Can I try a little?',gr:'Μπορώ να δοκιμάσω λίγο;',pron:'bo-RO na do-ki-MA-so LI-go'},
+  {cat:'streetfood',en:'Two portions, please',gr:'Δύο μερίδες, παρακαλώ',pron:'DHI-o me-RI-dhes, pa-ra-ka-LO'},
+];
+
+const catLabels = {restaurant:'🍽 Restaurant',bar:'🍻 Bar',shopping:'🛍 Shopping',essentials:'✨ Essentials',ordering:'📋 Ordering',dietary:'🥗 Dietary',feedback:'😋 Feedback',paying:'💶 Paying',streetfood:'🥙 Street Food'};
+
+// ─── API KEY ─────────────────────────────────────────────────────────────────
+let ANTHROPIC_API_KEY = localStorage.getItem('crete_api_key') || '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';
+function saveApiKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  if (!k) return;
+  ANTHROPIC_API_KEY = k;
+  localStorage.setItem('crete_api_key', k);
+  document.getElementById('api-banner').innerHTML = '<span>✅</span><span style="opacity:0.7;font-size:0.9em">API key saved. AI Practice is ready!</span><button onclick="clearApiKey()" style="margin-left:auto;padding:5px 10px;border-radius:6px;border:none;background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-size:0.8em">Change</button>';
+}
+function clearApiKey() {
+  ANTHROPIC_API_KEY = ''; localStorage.removeItem('crete_api_key');
+  document.getElementById('api-banner').innerHTML = '<span>🔑</span><input type="password" id="api-key-input" placeholder="Paste your Anthropic API key for AI Practice..." style="flex:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:7px 12px;color:#fff;font-size:0.95em;font-family:monospace;outline:none"><button onclick="saveApiKey()" style="padding:7px 14px;border-radius:8px;border:none;background:var(--gold);color:var(--deeper);font-weight:600;cursor:pointer;font-size:0.9em;white-space:nowrap">Save</button>';
+}
+if (ANTHROPIC_API_KEY) saveApiKey();
+
+// ─── SPEECH ──────────────────────────────────────────────────────────────────
+function speakText(text, lang = 'el-GR') {
+  // Use Google Translate TTS for reliable Greek audio
+  const ttsLang = lang.startsWith('el') ? 'el' : 'en';
+  const encoded = encodeURIComponent(text);
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${ttsLang}&client=tw-ob`;
+  const audio = new Audio(url);
+  audio.play().catch(() => {
+    // Fallback to browser speech synthesis
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  });
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name==='flashcards') renderFC();
+  if (name==='quiz') startQuiz();
+  if (name==='practice') initPractice();
+}
+
+// ─── PHRASEBOOK ───────────────────────────────────────────────────────────────
+let currentCat = 'all';
+function filterPhrases(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPhrases();
+}
+function renderPhrases() {
+  const filtered = currentCat==='all' ? phrases : phrases.filter(p => p.cat===currentCat);
+  document.getElementById('phrase-list').innerHTML = filtered.map(p => `
+    <div class="phrase-card">
+      <div class="phrase-card-row">
+        <div class="phrase-card-text">
+          <div class="phrase-en">${p.en}</div>
+          <div class="phrase-gr">${p.gr}</div>
+          <div class="phrase-pron">/${p.pron}/</div>
+        </div>
+        <button class="hear-btn" onclick="speakText('${p.gr.replace(/'/g,"\\'")}','el-GR')">🔊 Hear</button>
+      </div>
+    </div>`).join('');
+}
+renderPhrases();
+
+// ─── FLASHCARDS ───────────────────────────────────────────────────────────────
+let fcDeck=[...phrases], fcIdx=0;
+function setFcFilter(cat,btn) {
+  document.querySelectorAll('#fc-filter .cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  fcDeck = cat==='all' ? [...phrases] : phrases.filter(p=>p.cat===cat);
+  fcIdx=0; renderFC();
+}
+function renderFC() {
+  if(!fcDeck.length) return;
+  document.getElementById('fc-card').classList.remove('flipped');
+  const p=fcDeck[fcIdx];
+  document.getElementById('fc-cat').textContent=catLabels[p.cat]||'';
+  document.getElementById('fc-en').textContent=p.en;
+  document.getElementById('fc-gr').textContent=p.gr;
+  document.getElementById('fc-pron').textContent='/'+p.pron+'/';
+  document.getElementById('fc-progress').textContent=`${fcIdx+1} / ${fcDeck.length}`;
+}
+function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+function fcMove(dir) {
+  document.getElementById('fc-card').classList.remove('flipped');
+  fcIdx=(fcIdx+dir+fcDeck.length)%fcDeck.length;
+  setTimeout(renderFC,150);
+}
+function shuffleCards() { fcDeck=fcDeck.sort(()=>Math.random()-0.5); fcIdx=0; renderFC(); }
+function hearCurrent() { if(fcDeck[fcIdx]) speakText(fcDeck[fcIdx].gr,'el-GR'); }
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+let quizQueue=[],quizIdx=0,quizScore=0,quizAnswered=false,quizHintsUsed=0;
+function startQuiz() {
+  quizQueue=[...phrases].sort(()=>Math.random()-0.5).slice(0,10);
+  quizIdx=0; quizScore=0; quizAnswered=false; quizHintsUsed=0;
+  renderQuiz();
+}
+function renderQuiz() {
+  const body=document.getElementById('quiz-body');
+  if(quizIdx>=quizQueue.length) {
+    document.getElementById('quiz-score').textContent='';
+    body.innerHTML=`<div class="quiz-end">
+      <div class="score-big">${quizScore}/${quizQueue.length}</div>
+      <div class="score-label">Hints used: ${quizHintsUsed}</div>
+      <div class="score-msg">${quizScore>=8?'🎉 Excellent — Crete is ready for you!':quizScore>=5?'👍 Good effort, keep going!':'📚 Keep practising — you\'ll get there!'}</div>
+      <button class="quiz-restart" onclick="startQuiz()">Try Again</button>
+    </div>`; return;
+  }
+  document.getElementById('quiz-score').textContent=`Question ${quizIdx+1} of ${quizQueue.length} · Score: ${quizScore}`;
+  const p=quizQueue[quizIdx];
+  const distractors=phrases.filter(x=>x!==p).sort(()=>Math.random()-0.5).slice(0,2).map(x=>x);
+  const options=[...distractors,p].sort(()=>Math.random()-0.5);
+  body.innerHTML=`
+    <div class="quiz-q">
+      <div class="label">What does this mean? Choose the correct phrase.</div>
+      <div class="question">${p.en}</div>
+      <button class="q-audio-btn" onclick="speakText('${p.en.replace(/'/g,"\\'")}','en-GB')">🔊 Hear the question</button>
+    </div>
+    <div class="quiz-options">
+      ${options.map((o,i)=>`
+        <button class="quiz-opt" onclick="pickAnswer(this,${i},${options.indexOf(p)},${quizIdx})">
+          <div class="opt-inner">
+            <div class="opt-audio" onclick="event.stopPropagation();speakText('${o.gr.replace(/'/g,"\\'")}','el-GR')">🔊</div>
+            <div class="opt-content">
+              <div class="opt-gr">${o.gr}</div>
+              <div class="opt-pron">${o.pron}</div>
+              <div>
+                <span class="opt-en opt-en-hidden" id="opt-en-${i}">${o.en}</span>
+                <button class="opt-hint-btn" id="hint-btn-${i}" onclick="event.stopPropagation();revealOptHint(${i})">? hint</button>
+              </div>
+            </div>
+          </div>
+        </button>`).join('')}
+    </div>
+    <div class="quiz-hint-bar">
+      <button class="quiz-hint-all" onclick="revealAllQuizHints()">💡 I'm stuck — show all meanings</button>
+    </div>
+    <div class="quiz-feedback" id="quiz-fb"></div>
+    <button class="quiz-next" id="qnb" onclick="nextQ()" style="display:none">Next →</button>
+  `;
+}
+function revealOptHint(i) {
+  document.getElementById('opt-en-'+i).classList.remove('opt-en-hidden');
+  document.getElementById('hint-btn-'+i).style.display='none';
+  quizHintsUsed++;
+}
+function revealAllQuizHints() {
+  document.querySelectorAll('.opt-en-hidden').forEach(el => el.classList.remove('opt-en-hidden'));
+  document.querySelectorAll('.opt-hint-btn').forEach(el => el.style.display='none');
+  quizHintsUsed++;
+}
+function pickAnswer(btn,chosen,correct,qIdx) {
+  if(quizAnswered) return;
+  quizAnswered=true;
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.querySelectorAll('.opt-en-hidden').forEach(el=>el.classList.remove('opt-en-hidden'));
+  document.querySelectorAll('.opt-hint-btn').forEach(el=>el.style.display='none');
+  const fb=document.getElementById('quiz-fb');
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts[correct].classList.add('correct');
+  speakText(quizQueue[qIdx].gr,'el-GR');
+  if(chosen===correct) {
+    quizScore++;
+    fb.textContent='✅ Correct!'; fb.style.color='#7fff7f';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ The correct answer is shown in green'; fb.style.color='#ff9f9f';
+    trackWeakPhrase(quizQueue[qIdx]);
+  }
+  document.getElementById('qnb').style.display='block';
+  document.getElementById('quiz-score').textContent=`Question ${quizIdx+1} of ${quizQueue.length} · Score: ${quizScore}`;
+}
+function nextQ() { quizIdx++; quizAnswered=false; renderQuiz(); }
+
+// ─── WEAK PHRASE TRACKING ─────────────────────────────────────────────────────
+function loadWeakPhrases() {
+  try { return JSON.parse(localStorage.getItem('crete_weak') || '{}'); } catch(e) { return {}; }
+}
+function saveWeakPhrases(obj) {
+  localStorage.setItem('crete_weak', JSON.stringify(obj));
+}
+function trackWeakPhrase(p) {
+  const weak = loadWeakPhrases();
+  const key = p.gr;
+  weak[key] = { gr: p.gr, en: p.en, pron: p.pron, cat: p.cat, count: (weak[key]?.count||0)+1 };
+  saveWeakPhrases(weak);
+}
+function trackHintUsed(p) {
+  const weak = loadWeakPhrases();
+  const key = p.gr;
+  if (!weak[key]) weak[key] = { gr: p.gr, en: p.en, pron: p.pron, cat: p.cat, count: 0 };
+  weak[key].hints = (weak[key].hints||0)+1;
+  saveWeakPhrases(weak);
+}
+
+// ─── AI PRACTICE GAME ─────────────────────────────────────────────────────────
+let currentScenario = null;
+let gameQuestions = [];
+let gameIdx = 0;
+let gameCorrect = 0;
+let gameHints = 0;
+let sessionWeak = {};
+let currentSceneGreek = '';
+let gameAnswered = false;
+
+const scenarioPrompts = {
+  restaurant: "You are a friendly Greek waiter at a traditional Cretan taverna. The customer has just sat down.",
+  bar: "You are a bartender at a lively bar in Heraklion, Crete. The customer has just approached the bar.",
+  market: "You are a market stall holder in Chania market selling souvenirs and local goods.",
+  streetfood: "You are running a busy gyros and souvlaki stall on the streets of Rethymno, Crete.",
+  dietary: "You are a waiter at a restaurant. The customer wants to discuss their dietary requirements.",
+  paying: "You are a waiter bringing the bill to a table at a Cretan restaurant."
+};
+
+function initPractice() {
+  renderWeakArea();
+}
+
+function renderWeakArea() {
+  const weak = loadWeakPhrases();
+  const entries = Object.values(weak).sort((a,b)=>(b.count+b.hints||0)-(a.count+a.hints||0)).slice(0,6);
+  const area = document.getElementById('weak-area');
+  const list = document.getElementById('weak-list');
+  if (entries.length === 0) { area.style.display='none'; return; }
+  area.style.display='block';
+  list.innerHTML = entries.map(e=>`
+    <div class="weak-item">
+      <span class="wph">${e.gr} <span style="opacity:0.5;font-size:0.85em">— ${e.en}</span></span>
+      <span class="wcnt">${(e.count||0)} wrong · ${(e.hints||0)} hints</span>
+    </div>`).join('');
+}
+
+async function startScenario(scenario) {
+  if (!ANTHROPIC_API_KEY) {
+    alert('Please add your Anthropic API key first — it\'s the banner at the top of the page.');
+    return;
+  }
+  currentScenario = scenario;
+  gameQuestions = []; gameIdx = 0; gameCorrect = 0; gameHints = 0;
+  sessionWeak = {}; gameAnswered = false;
+
+  document.getElementById('practice-select').style.display='none';
+  document.getElementById('practice-end').style.display='none';
+  document.getElementById('targeted-area').classList.remove('active');
+  document.getElementById('practice-game').classList.add('active');
+
+  updateStats();
+  showLoading();
+  await loadNextQuestion();
+}
+
+function showLoading() {
+  document.getElementById('game-scene-text').innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  document.getElementById('answer-tiles').innerHTML = '';
+  document.getElementById('game-feedback').classList.remove('show');
+  document.getElementById('game-next-btn').classList.remove('show');
+  document.getElementById('game-end-btn').classList.remove('show');
+}
+
+async function loadNextQuestion() {
+  gameAnswered = false;
+  showLoading();
+
+  const weak = loadWeakPhrases();
+  const weakList = Object.values(weak).map(w=>`"${w.en}" (${w.gr})`).join(', ');
+  const catPhrases = phrases.filter(p => {
+    const catMap = {restaurant:['restaurant','ordering','feedback'],bar:['bar'],market:['shopping'],streetfood:['streetfood','ordering'],dietary:['dietary','ordering'],paying:['paying']};
+    return (catMap[currentScenario]||[currentScenario]).includes(p.cat);
+  });
+
+  const systemPrompt = `You are a Greek language tutor running an interactive practice game for someone preparing to visit Crete. 
+${scenarioPrompts[currentScenario]}
+
+Your job is to create ONE realistic scenario exchange for the learner. They are a beginner English speaker learning Greek.
+
+You must respond with ONLY valid JSON in this exact format:
+{
+  "scene": "A short scene-setting sentence in English describing what is happening (1-2 sentences, immersive)",
+  "greekSaid": "A short Greek phrase the character (waiter/bartender/etc) just said to the customer — something the customer needs to respond to. Keep it short and practical.",
+  "greekSaidPron": "Pronunciation guide for the above Greek phrase",
+  "correctPhrase": {
+    "gr": "The correct Greek response the learner should say",
+    "pron": "Pronunciation guide",
+    "en": "English meaning"
+  },
+  "wrongPhrases": [
+    {"gr": "A plausible but wrong Greek phrase", "pron": "...", "en": "English meaning"},
+    {"gr": "Another plausible but wrong phrase", "pron": "...", "en": "English meaning"}
+  ],
+  "feedbackCorrect": "Short encouraging feedback in English explaining why this is right and any useful tip",
+  "feedbackWrong": "Short feedback explaining what went wrong and the correct answer"
+}
+
+The wrong phrases must be from the same context (not completely random) — they should be plausible mistakes.
+${weakList ? `The learner has previously struggled with: ${weakList}. Try to naturally incorporate these.` : ''}
+Use only practical, common phrases that someone would actually need. Keep Greek phrases short.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: `Generate question ${gameIdx+1} for the ${currentScenario} scenario. Make it feel like a natural progression of a real conversation. Respond with ONLY the raw JSON object, no markdown, no code fences, no explanation.` }],
+        system: systemPrompt
+      })
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('API error:', res.status, errText);
+      throw new Error(`API returned ${res.status}: ${errText}`);
+    }
+    const data = await res.json();
+    console.log('API response:', data);
+    const text = data.content?.find(b=>b.type==='text')?.text || '';
+    console.log('Raw text:', text);
+    // Extract JSON — handle code fences, leading text, etc.
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('No JSON found in response: ' + text);
+    const q = JSON.parse(jsonMatch[0]);
+    gameQuestions.push(q);
+    renderQuestion(q);
+  } catch(e) {
+    console.error('loadNextQuestion error:', e);
+    document.getElementById('game-scene-text').innerHTML = `
+      <span style="color:#ff9f9f">⚠️ Error loading question: ${e.message}</span><br>
+      <button onclick="loadNextQuestion()" style="margin-top:10px;padding:8px 16px;border-radius:8px;border:none;background:var(--gold);color:var(--deeper);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Try again</button>
+    `;
+  }
+}
+
+function renderQuestion(q) {
+  currentSceneGreek = q.greekSaid;
+  gameIdx++;
+  updateStats();
+
+  document.getElementById('game-scene-text').innerHTML = `
+    ${q.scene}
+    <span class="gr-phrase">${q.greekSaid}</span>
+    <span style="font-size:0.78em;opacity:0.45;font-style:italic">/${q.greekSaidPron}/</span>
+  `;
+
+  const options = [q.correctPhrase, ...q.wrongPhrases].sort(()=>Math.random()-0.5);
+  const correctIdx = options.indexOf(q.correctPhrase);
+
+  document.getElementById('answer-tiles').innerHTML = options.map((o,i)=>`
+    <div class="answer-tile" id="tile-${i}" onclick="pickGameAnswer(${i},${correctIdx},${i===correctIdx})">
+      <div class="tile-inner">
+        <div class="tile-audio" onclick="event.stopPropagation();speakText('${o.gr.replace(/'/g,"\\'")}','el-GR')">🔊</div>
+        <div class="tile-body">
+          <div class="tile-gr">${o.gr}</div>
+          <div class="tile-pron">/${o.pron}/</div>
+          <div class="tile-en-wrap">
+            <span class="tile-en hidden" id="tile-en-${i}">${o.en}</span>
+            <button class="tile-hint-btn" id="tile-hint-${i}" onclick="event.stopPropagation();revealTileHint(${i},'${o.gr.replace(/'/g,"\\'")}')">? hint</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('game-feedback').classList.remove('show');
+  document.getElementById('game-next-btn').classList.remove('show');
+  document.getElementById('game-end-btn').classList.remove('show');
+  speakText(q.greekSaid, 'el-GR');
+}
+
+function revealTileHint(i, gr) {
+  document.getElementById('tile-en-'+i).classList.remove('hidden');
+  document.getElementById('tile-hint-'+i).style.display='none';
+  gameHints++;
+  updateStats();
+  // Track the phrase as hint-used
+  const opt = gameQuestions[gameQuestions.length-1];
+  if (opt) trackHintUsed({gr: gr, en:'', pron:'', cat: currentScenario});
+}
+
+function revealAllHints() {
+  document.querySelectorAll('.tile-en.hidden').forEach(el=>el.classList.remove('hidden'));
+  document.querySelectorAll('.tile-hint-btn').forEach(el=>el.style.display='none');
+  gameHints++;
+  updateStats();
+}
+
+function pickGameAnswer(chosen, correctIdx, isCorrect) {
+  if (gameAnswered) return;
+  gameAnswered = true;
+
+  document.querySelectorAll('.answer-tile').forEach(t=>t.classList.add('disabled'));
+  document.querySelectorAll('.tile-en.hidden').forEach(el=>el.classList.remove('hidden'));
+  document.querySelectorAll('.tile-hint-btn').forEach(el=>el.style.display='none');
+
+  document.getElementById('tile-'+correctIdx).classList.add('correct');
+  const fb = document.getElementById('game-feedback');
+  const q = gameQuestions[gameQuestions.length-1];
+
+  speakText(q.correctPhrase.gr, 'el-GR');
+
+  if (isCorrect) {
+    gameCorrect++;
+    document.getElementById('tile-'+chosen).classList.add('correct');
+    fb.className='game-feedback show correct-fb';
+    fb.innerHTML = `✅ ${q.feedbackCorrect}<br><button class="fb-audio-btn" onclick="speakText('${q.correctPhrase.gr.replace(/'/g,"\\'")}','el-GR')">🔊 Hear it again</button>`;
+  } else {
+    document.getElementById('tile-'+chosen).classList.add('wrong');
+    fb.className='game-feedback show wrong-fb';
+    fb.innerHTML = `❌ ${q.feedbackWrong}<br><button class="fb-audio-btn" onclick="speakText('${q.correctPhrase.gr.replace(/'/g,"\\'")}','el-GR')">🔊 Hear the correct phrase</button>`;
+    trackWeakPhrase({gr: q.correctPhrase.gr, en: q.correctPhrase.en, pron: q.correctPhrase.pron, cat: currentScenario});
+    sessionWeak[q.correctPhrase.gr] = q.correctPhrase;
+  }
+
+  updateStats();
+
+  const nextBtn = document.getElementById('game-next-btn');
+  const endBtn = document.getElementById('game-end-btn');
+  nextBtn.classList.add('show');
+  if (gameIdx >= 3) endBtn.classList.add('show');
+}
+
+function nextGameQuestion() {
+  document.getElementById('game-feedback').classList.remove('show');
+  document.getElementById('game-next-btn').classList.remove('show');
+  document.getElementById('game-end-btn').classList.remove('show');
+  loadNextQuestion();
+}
+
+function updateStats() {
+  document.getElementById('stat-correct').textContent = gameCorrect;
+  document.getElementById('stat-hints').textContent = gameHints;
+  document.getElementById('stat-q').textContent = gameIdx;
+}
+
+function endSession() {
+  document.getElementById('practice-game').classList.remove('active');
+  document.getElementById('practice-end').style.display='block';
+
+  const total = gameIdx;
+  const pct = total > 0 ? Math.round((gameCorrect/total)*100) : 0;
+  document.getElementById('end-score').textContent = `${gameCorrect}/${total}`;
+  document.getElementById('end-msg').textContent = pct>=80 ? '🎉 Brilliant! Crete is going to love you.' : pct>=50 ? '👍 Good work — keep practising these tricky ones.' : '📚 Good effort — the targeted exercises below will help!';
+
+  const weakEntries = Object.values(sessionWeak);
+  const endWeak = document.getElementById('end-weak');
+  if (weakEntries.length > 0) {
+    endWeak.style.display='block';
+    document.getElementById('end-weak-list').innerHTML = weakEntries.map(e=>`
+      <div class="weak-item">
+        <span class="wph">${e.gr}</span>
+        <span style="opacity:0.6;font-size:0.85em">${e.en}</span>
+      </div>`).join('');
+  } else {
+    endWeak.style.display='none';
+  }
+  renderWeakArea();
+}
+
+function backToPractice() {
+  document.getElementById('practice-select').style.display='block';
+  document.getElementById('practice-game').classList.remove('active');
+  document.getElementById('practice-end').style.display='none';
+  document.getElementById('targeted-area').classList.remove('active');
+  renderWeakArea();
+}
+
+// ─── TARGETED EXERCISES ───────────────────────────────────────────────────────
+async function startTargetedExercise() {
+  if (!ANTHROPIC_API_KEY) {
+    alert('Please add your Anthropic API key first.');
+    return;
+  }
+
+  document.getElementById('practice-select').style.display='none';
+  document.getElementById('practice-end').style.display='none';
+  document.getElementById('practice-game').classList.remove('active');
+  document.getElementById('targeted-area').classList.add('active');
+
+  const content = document.getElementById('targeted-content');
+  content.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+
+  const weak = loadWeakPhrases();
+  const entries = Object.values(weak).sort((a,b)=>(b.count+b.hints||0)-(a.count+a.hints||0)).slice(0,5);
+  const weakDesc = entries.map(e=>`- "${e.en}" → ${e.gr} (wrong ${e.count||0}x, needed hints ${e.hints||0}x)`).join('\n');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: `You are a friendly Greek language tutor helping someone prepare for a holiday in Crete. 
+They've been practising and you can see which phrases they're struggling with.
+Create a warm, personal mini-lesson to help them remember their weak phrases.
+Format your response as HTML using these classes for styling:
+- Wrap each phrase block in: <div class="t-phrase"><div class="t-gr">Greek here</div><div class="t-pron">pronunciation</div><div class="t-tip">tip or explanation</div></div>
+- Use <strong> for emphasis
+- Keep it conversational and encouraging, like a real tutor
+- Include memory tricks, patterns, or connections that make phrases stick
+- Keep the total response concise — quality over quantity`,
+        messages: [{
+          role: 'user',
+          content: `Here are the phrases I've been struggling with:\n${weakDesc}\n\nPlease create a short personalised lesson to help me remember these. Include memory tricks and tips for each one.`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.find(b=>b.type==='text')?.text || 'Sorry, could not generate exercises.';
+    content.innerHTML = text;
+  } catch(e) {
+    content.textContent = 'Error generating exercises. Please check your API key.';
+  }
+}
+</script>
+</body>
+</html>
