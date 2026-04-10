@@ -619,27 +619,10 @@ if (ANTHROPIC_API_KEY) {
 
 // ─── SPEECH ──────────────────────────────────────────────────────────────────
 function speakText(text, lang = 'el-GR') {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  u.rate = 0.8;
-  u.pitch = 1;
-  // Load voices and try to find Greek
-  const trySpeak = () => {
-    const voices = window.speechSynthesis.getVoices();
-    if (lang.startsWith('el')) {
-      const greek = voices.find(v => v.lang.startsWith('el'));
-      if (greek) u.voice = greek;
-    }
-    window.speechSynthesis.speak(u);
-  };
-  // Voices may not be loaded yet
-  if (window.speechSynthesis.getVoices().length > 0) {
-    trySpeak();
-  } else {
-    window.speechSynthesis.onvoiceschanged = trySpeak;
-  }
+  const ttsLang = lang.startsWith('el') ? 'el' : 'en';
+  const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=' + ttsLang + '&client=gtx&ttsspeed=0.8';
+  const a = new Audio(url);
+  a.play().catch(e => console.log('Audio error:', e));
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
